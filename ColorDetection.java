@@ -163,7 +163,7 @@ public class ColorDetection {
             DetectedObject lastDefender = defendingPlayers.size() > 1 ? defendingPlayers.get(1) : defendingPlayers.get(0);
             System.out.println("Dernier défenseur : " + lastDefender.boundingRect);
             for (DetectedObject attacker : attackingPlayers) {
-                defendingPlayers.sort(Comparator.comparingInt(o -> o.boundingRect.x));
+                defendingPlayers.sort(Comparator.comparingInt(o -> o.boundingRect.y));
                 lastDefender = defendingPlayers.get(1);
                 if (attacker.boundingRect.y < lastDefender.boundingRect.y && attacker.boundingRect.y < ball.boundingRect.y) {
                     int y = lastDefender.boundingRect.y;
