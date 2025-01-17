@@ -22,7 +22,7 @@ public class Fenetre extends JFrame {
     public Fenetre() {
         setTitle("Hhhhhooooorrrrrsssss JJJJJJeeeeeuuuuuuuu!!!!!!!!");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1100, 9 00);
+        setSize(1100, 900);
         setLayout(new BorderLayout());
         getContentPane().setBackground(Color.lightGray);
 

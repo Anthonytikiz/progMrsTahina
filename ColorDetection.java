@@ -126,18 +126,35 @@ public class ColorDetection {
             DetectedObject lastDefender = defendingPlayers.size() > 1 ? defendingPlayers.get(1) : defendingPlayers.get(0);
             // Imgproc.putTeyt(image, "lastDefender", lastDefender.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEy, 1, new Scalar(255, 0, 0));
             for (DetectedObject attacker : attackingPlayers) {
+                defendingPlayers.sort((o1, o2) -> Integer.compare(o2.boundingRect.y, o1.boundingRect.y));
+                lastDefender = defendingPlayers.size() > 1 ? defendingPlayers.get(1) : defendingPlayers.get(0);
+    
                 if (attacker.boundingRect.y+attacker.boundingRect.height > lastDefender.boundingRect.y+lastDefender.boundingRect.height && attacker.boundingRect.y > ball.boundingRect.y) {
-                    int y = lastDefender.boundingRect.y+lastDefender.boundingRect.height;
-                    int xStart = 0;
-                    int xEnd = image.cols();
-                    Imgproc.line(image, new Point(xStart, y), new Point(xEnd, y),  new Scalar(0, 0, 255), 2);
+
                     Imgproc.putText(image, "HJ", attacker.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 2, new Scalar(0, 0, 0),4);
                 }
                 if (attacker.boundingRect.y+attacker.boundingRect.height < lastDefender.boundingRect.y+lastDefender.boundingRect.height && attacker.boundingRect.y > ball.boundingRect.y && attacker!=closestPlayer) {
                     Imgproc.putText(image, "M", attacker.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 2, new Scalar(0, 0, 0),4);
                 }
-                if (attacker.boundingRect.y < ball.boundingRect.y && attacker!=closestPlayer && attacker.boundingRect.x < ball.boundingRect.x) {
-                    Imgproc.arrowedLine(image, new Point(closestPlayer.boundingRect.x, closestPlayer.boundingRect.y), new Point(attacker.boundingRect.x+attacker.boundingRect.width, attacker.boundingRect.y+attacker.boundingRect.height), new Scalar(0, 0, 0), 2, Imgproc.LINE_AA, 0, 0.1);
+                defendingPlayers.sort(Comparator.comparingInt(o -> o.boundingRect.x));
+                //hors jeux droite
+                lastDefender = defendingPlayers.get(0);
+                if (attacker.boundingRect.x < lastDefender.boundingRect.x && attacker.boundingRect.y > ball.boundingRect.y) {
+                    int x = lastDefender.boundingRect.x;
+                    int yStart = 0;
+                    int yEnd = image.rows();
+                    Imgproc.line(image, new Point(x, yStart), new Point(x, yEnd),  new Scalar(0, 0, 255), 2);
+                    Imgproc.putText(image, "HJL", attacker.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 2, new Scalar(0, 0, 0),4);
+                }
+                defendingPlayers.sort((o1, o2) -> Integer.compare(o2.boundingRect.y, o1.boundingRect.x));
+                lastDefender = defendingPlayers.get(0);
+                //hors jeux gauche
+                if (attacker.boundingRect.x + attacker.boundingRect.width > lastDefender.boundingRect.x+lastDefender.boundingRect.width && attacker.boundingRect.y > ball.boundingRect.y) {
+                    int yStart = 0;
+                    int yEnd = image.rows();
+                    int x = lastDefender.boundingRect.x+lastDefender.boundingRect.width;
+                    Imgproc.line(image, new Point(x, yStart), new Point(x, yEnd),  new Scalar(0, 0, 255), 2);
+                    Imgproc.putText(image, "HJL", attacker.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 2, new Scalar(0, 0, 0),4);
                 }
             }
         }
@@ -146,6 +163,8 @@ public class ColorDetection {
             DetectedObject lastDefender = defendingPlayers.size() > 1 ? defendingPlayers.get(1) : defendingPlayers.get(0);
             System.out.println("Dernier défenseur : " + lastDefender.boundingRect);
             for (DetectedObject attacker : attackingPlayers) {
+                defendingPlayers.sort(Comparator.comparingInt(o -> o.boundingRect.x));
+                lastDefender = defendingPlayers.get(1);
                 if (attacker.boundingRect.y < lastDefender.boundingRect.y && attacker.boundingRect.y < ball.boundingRect.y) {
                     int y = lastDefender.boundingRect.y;
                     int xStart = 0;
@@ -156,12 +175,26 @@ public class ColorDetection {
                 if (attacker.boundingRect.y > lastDefender.boundingRect.y && attacker.boundingRect.y < ball.boundingRect.y && attacker!=closestPlayer) {
                     Imgproc.putText(image, "M", attacker.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 2, new Scalar(0, 0, 0),4);
                 }
-                if (attacker.boundingRect.y > ball.boundingRect.y && attacker!=closestPlayer && attacker.boundingRect.x < ball.boundingRect.x) {
-                    Imgproc.arrowedLine(image, new Point(closestPlayer.boundingRect.x+closestPlayer.boundingRect.width, closestPlayer.boundingRect.y+closestPlayer.boundingRect.height), new Point(attacker.boundingRect.x, attacker.boundingRect.y), new Scalar(0, 0, 0), 2, Imgproc.LINE_AA, 0, 0.1);
+                defendingPlayers.sort(Comparator.comparingInt(o -> o.boundingRect.x));
+                lastDefender = defendingPlayers.get(0);
+                if (attacker.boundingRect.x < lastDefender.boundingRect.x && attacker.boundingRect.y < ball.boundingRect.y) {
+                    int x = lastDefender.boundingRect.x;
+                    int yStart = 0;
+                    int yEnd = image.rows();
+                    Imgproc.line(image, new Point(x, yStart), new Point(x, yEnd),  new Scalar(0, 0, 255), 2);
+                    Imgproc.putText(image, "HJL", attacker.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 3, new Scalar(0, 0, 0),4);
+                }
+                defendingPlayers.sort((o1, o2) -> Integer.compare(o2.boundingRect.y, o1.boundingRect.x));
+                lastDefender = defendingPlayers.get(0);
+                if (attacker.boundingRect.x + attacker.boundingRect.width > lastDefender.boundingRect.x+lastDefender.boundingRect.width && attacker.boundingRect.y < ball.boundingRect.y) {
+                    int yStart = 0;
+                    int yEnd = image.rows();
+                    int x = lastDefender.boundingRect.x+lastDefender.boundingRect.width;
+                    Imgproc.line(image, new Point(x, yStart), new Point(x, yEnd),  new Scalar(0, 0, 255), 2);
+                    Imgproc.putText(image, "HJg", attacker.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 3, new Scalar(0, 0, 0),4);
                 }
             }
         }
-        
         // Imgproc.putText(image, "Possesseur", closestPlayer.boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 0, 0),4);
         Imgcodecs.imwrite("resultat.jpg", image);
         System.out.println("Image avec détection de hors-jeu sauvegardée : annotated_offside_result.jpg");
